@@ -6,7 +6,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
   if(argc < 4) {
-    cout << "Usage: " << argv[0] << "<image> <host> <port>" << endl;
+    cout << "Usage: " << argv[0] << "<image> <host> <port> [x offset] [y offset]" << endl;
   } else {
     int xOffset = 0, yOffset = 0;
 
