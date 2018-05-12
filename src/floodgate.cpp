@@ -3,8 +3,7 @@
 #include <unistd.h>
 #include "../include/floodgate.h"
 
-Floodgate::Floodgate(string image, string host, uint16_t port) :
-  image(image),
+Floodgate::Floodgate(string image, string host, uint16_t port, int xOffset, int yOffset) :
   host(host),
   port(port) {
 
@@ -12,7 +11,7 @@ Floodgate::Floodgate(string image, string host, uint16_t port) :
   stringstream str;
   for(int y = 0; y < imageMat.size().height; y++) {
     for(int x = 0; x < imageMat.size().width; x++) {
-      str << "PX " << dec << x << " " << y+340 << " "
+      str << "PX " << dec << x+xOffset << " " << y+yOffset << " "
           << b2h(imageMat.at<cv::Vec3b>(y, x)[0])
           << b2h(imageMat.at<cv::Vec3b>(y, x)[1])
           << b2h(imageMat.at<cv::Vec3b>(y, x)[2])

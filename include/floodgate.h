@@ -8,7 +8,7 @@ using namespace std;
 
 class Floodgate {
 public:
-  Floodgate(string image, string host, uint16_t port);
+  Floodgate(string image, string host, uint16_t port, int xOffset, int yOffset);
   ~Floodgate();
 
   bool open();
@@ -16,7 +16,7 @@ public:
   void shut();
 
 private:
-  string image, host;
+  string host;
   uint16_t port;
   int socketFd;
   struct sockaddr_in server;
