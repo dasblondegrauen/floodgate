@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+set(CMAKE_BUILD_TYPE RelWithDebugInfo)
 
 project(floodgate)
 find_package(OpenCV REQUIRED)
@@ -8,10 +11,6 @@ set(FLOODGATE_SRC
     src/floodgate.cpp
     )
 
-set(FLOODGATE_INCLUDE
-    include/floodgate.h
-    )
-
-INCLUDE_DIRECTORIES(include ${OpenCV_INCLUDE_DIRS})
-add_executable(${PROJECT_NAME} ${FLOODGATE_SRC} ${FLOODGATE_INCLUDE})
+include_directories(include ${OpenCV_INCLUDE_DIRS})
+add_executable(${PROJECT_NAME} ${FLOODGATE_SRC})
 target_link_libraries(floodgate ${OpenCV_LIBS})
