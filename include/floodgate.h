@@ -11,7 +11,7 @@ using namespace std;
 
 class Floodgate {
     public:
-        Floodgate(string image, string host, uint16_t port, int xOffset, int yOffset);
+        Floodgate(string image, string host, uint16_t port, int x_offset, int y_offset);
         ~Floodgate();
 
         bool open();
@@ -21,11 +21,11 @@ class Floodgate {
     private:
         const string host;
         uint16_t port;
-        int socketFd;
+        int sockfd;
         struct sockaddr_in server;
         string command;
 
-        string b2h(uint8_t);
+        string b2h(uint8_t value);
 };
 
 #endif // FLOODGATE_HPP

@@ -1,20 +1,21 @@
 #include <sstream>
 #include <iomanip>
 #include <unistd.h>
+#include <errno.h>
 #include "../include/floodgate.h"
 
-Floodgate::Floodgate(string image, string host, uint16_t port, int xOffset, int yOffset) :
+Floodgate::Floodgate(string image, string host, uint16_t port, int x_offset, int y_offset) :
     host(host),
     port(port) {
 
-    cv::Mat imageMat = cv::imread(image);
+    cv::Mat image_mat = cv::imread(image);
     stringstream str;
-    for(int y = 0; y < imageMat.size().height; y++) {
-        for(int x = 0; x < imageMat.size().width; x++) {
-            str << "PX " << dec << x+xOffset << " " << y+yOffset << " "
-                << b2h(imageMat.at<cv::Vec3b>(y, x)[0])
-                    << b2h(imageMat.at<cv::Vec3b>(y, x)[1])
-                    << b2h(imageMat.at<cv::Vec3b>(y, x)[2])
+    for(int y = 0; y < image_mat.size().height; y++) {
+        for(int x = 0; x < image_mat.size().width; x++) {
+            str << "PX " << dec << x+x_offset << " " << y+y_offset << " "
+                << b2h(image_mat.at<cv::Vec3b>(y, x)[0])
+                    << b2h(image_mat.at<cv::Vec3b>(y, x)[1])
+                    << b2h(image_mat.at<cv::Vec3b>(y, x)[2])
                     << "\n";
         }
     }
@@ -27,8 +28,9 @@ Floodgate::~Floodgate() {
 }
 
 bool Floodgate::open() {
-    socketFd = socket(AF_INET, SOCK_STREAM, 0);
-    if(socketFd == -1) {
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if(sockfd == -1) {
+        cerr << "Could not create socket: " << errno << endl;
         return false;
     }
 
@@ -36,7 +38,8 @@ bool Floodgate::open() {
     server.sin_family = AF_INET;
     server.sin_port = htons(port);
 
-    if(connect(socketFd, (struct sockaddr*) &server, sizeof(struct sockaddr_in))) {
+    if(connect(sockfd, (struct sockaddr*) &server, sizeof(struct sockaddr_in))) {
+        cerr << "Could not connect: " << errno << endl;
         return false;
     }
 
@@ -49,18 +52,22 @@ void Floodgate::flood() {
     size_t offset = 0;
 
     while(true) {
-        size_t written = write(socketFd, data+offset, len-offset);
+        size_t written = write(sockfd, data+offset, len-offset);
         offset += written;
 
         if(offset >= len) {
             offset = 0;
         }
     }
+
+    cerr << "Flood loop interrupted: " << errno << endl;
 }
 
 
 void Floodgate::shut() {
-    close(socketFd);
+    if(close(sockfd) == -1) {
+        cerr << "Could not close socket: " << errno << endl;
+    }
 }
 
 string Floodgate::b2h(uint8_t value) {
