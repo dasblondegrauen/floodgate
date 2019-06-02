@@ -31,7 +31,7 @@ fn main() {
         },
     };
 
-    let cmd = generate_command(&img);
+    let cmd = generate_command(&img, (0, 0));
     let socket = UdpSocket::bind("localhost:6666").expect("Could not bind locally");
 
     let mut i = 0;
@@ -44,12 +44,12 @@ fn main() {
     }
 }
 
-fn generate_command(img: &DynamicImage) -> String {
+fn generate_command(img: &DynamicImage, offset: (u32, u32)) -> String {
     let mut cmd = String::from("");
     for (x, y, pix) in img.pixels() {
         let rgba = pix.to_rgba();
         if rgba[0] != 0 {
-            cmd.push_str(&format!("PX {} {} {:02X}{:02X}{:02X}{:02X}\n", x, y, rgba[0], rgba[1], rgba[2], rgba[3]));
+            cmd.push_str(&format!("PX {} {} {:02X}{:02X}{:02X}{:02X}\n", x+offset.0, y+offset.1, rgba[0], rgba[1], rgba[2], rgba[3]));
         }
     }
 
