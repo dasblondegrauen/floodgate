@@ -1,32 +1,47 @@
 extern crate image;
 
 use image::{GenericImageView, DynamicImage, Pixel};
+use std::net::{UdpSocket};
 
 fn main() {
     let filename = std::env::args().nth(1);
     let filename = match filename {
-        Some(x) => x,
+        Some(value) => value,
         None => {
             println!("No filename given");
             std::process::exit(0);
         },
     };
 
+    let target = std::env::args().nth(2);
+    let target = match target {
+        Some(value) => value,
+        None => {
+            println!("No target given");
+            std::process::exit(0);
+        },
+    };
+
     let img = image::open(&filename);
     let img = match img {
-        Ok(x) => x,
+        Ok(value) => value,
         Err(error) => {
             println!("Could not open {}: {}", &filename, error);
             std::process::exit(0);
         },
     };
 
-
-    let (x, y) = img.dimensions();
-    println!("{}x{}", x, y);
-
     let cmd = generate_command(&img);
-    println!("Generated command:\n{}", cmd);
+    let socket = UdpSocket::bind("localhost:6666").expect("Could not bind locally");
+
+    let mut i = 0;
+    loop {
+        socket.send_to(cmd[i..i+512].as_bytes(), &target).expect(&format!("Could not send command"));
+        i += 512;
+        if i < cmd.len() {
+            i = 0;
+        }
+    }
 }
 
 fn generate_command(img: &DynamicImage) -> String {
