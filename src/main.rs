@@ -37,15 +37,8 @@ fn generate_command(img: &DynamicImage, offset: (u32, u32)) -> String {
 
 fn main() {
     let filename = get_argument(1, ArgumentType::Required(String::from("No filename given")));
-
-    let target = std::env::args().nth(2);
-    let target = match target {
-        Some(value) => value,
-        None => {
-            println!("No target given");
-            std::process::exit(0);
-        },
-    };
+    let target = get_argument(2, ArgumentType::Required(String::from("No target given")));
+    let offset: (u32, u32) = (get_argument(3, ArgumentType::Optional("0".to_string())).parse().unwrap(), get_argument(3, ArgumentType::Optional("0".to_string())).parse().unwrap());
 
     let img = image::open(&filename);
     let img = match img {
@@ -56,7 +49,7 @@ fn main() {
         },
     };
 
-    let cmd = generate_command(&img, (0, 0));
+    let cmd = generate_command(&img, offset);
     let socket = UdpSocket::bind("localhost:6666").expect("Could not bind locally");
 
     let mut i = 0;
