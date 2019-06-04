@@ -1,7 +1,8 @@
 extern crate image;
 
 use image::{GenericImageView, DynamicImage, Pixel};
-use std::net::UdpSocket;
+use std::net::TcpStream;
+use std::io::Write;
 
 enum ArgumentType {
     Required(String),
@@ -50,14 +51,9 @@ fn main() {
     };
 
     let cmd = generate_command(&img, offset);
-    let socket = UdpSocket::bind("localhost:6666").expect("Could not bind locally");
+    let mut stream = TcpStream::connect(&target).expect(&format!("Could not connect to {}", &target));
 
-    let mut i = 0;
     loop {
-        socket.send_to(cmd[i..i+512].as_bytes(), &target).expect(&format!("Could not send command"));
-        i += 512;
-        if i < cmd.len() {
-            i = 0;
-        }
+        stream.write_all(cmd.as_bytes()).expect("Could not send command");
     }
 }
