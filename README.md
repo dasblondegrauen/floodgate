@@ -1,4 +1,7 @@
-# Floodgate
+# Floodcontrol
+**Under construction!**
+Pretty much unusable right now.
+
 A really basic [Pixelflut](https://github.com/defnull/pixelflut) client.
 Work in progress, my improve on future chaos events.
 
