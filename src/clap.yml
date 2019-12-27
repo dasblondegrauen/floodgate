@@ -1,0 +1,16 @@
+name: floodctl
+version: "0.2"
+about: Pixelflut client
+
+args:
+    - host:
+        help: Pixelflug server address
+        required: true
+    - image:
+        help: Image file
+        required: true
+    - port:
+        help: Pixelflut server port
+        long: port
+        short: p
+        takes_value: true
