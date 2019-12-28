@@ -14,10 +14,12 @@ fn main() {
 
     let port = matches.value_of("port").unwrap_or_default();
     println!("Pixelflut server port: {}", port);
-
-    if let Some(image) = matches.value_of("image") {
-        println!("Image file: {}", image);
-    } else {
-        println!("No image file specified");
+    
+    if let Some(subcommand_matches) = matches.subcommand_matches("image") {
+        if let Some(filename) = subcommand_matches.value_of("file") {
+            println!("Image file: {}", filename);
+        } else {
+            println!("No image file specified");
+        }
     }
 }
