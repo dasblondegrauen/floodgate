@@ -6,12 +6,16 @@ args:
     - host:
         help: Pixelflug server address
         required: true
-    - image:
-        help: Image file
-        required: true
     - port:
         help: Pixelflut server port
         long: port
         short: p
         takes_value: true
         default_value: "1234"
+subcommands:
+    - image:
+        about: Send a static image
+        args:
+            -file:
+                help: Image file
+                required: true
