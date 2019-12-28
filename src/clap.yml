@@ -16,6 +16,6 @@ subcommands:
     - image:
         about: Send a static image
         args:
-            -file:
+            - file:
                 help: Image file
                 required: true
