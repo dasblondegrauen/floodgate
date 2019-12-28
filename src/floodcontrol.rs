@@ -1,4 +1,4 @@
-pub mod interfaces {
+pub mod stage {
     pub trait Generator {
         fn get_image(&self);
     }
@@ -8,6 +8,6 @@ pub mod interfaces {
     }
 
     pub trait Sender {
-        fn send_command(&self);
+        fn send_tcp(&self);
     }
 }
