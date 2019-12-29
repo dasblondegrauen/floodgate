@@ -1,5 +1,9 @@
 #[macro_use]
 extern crate clap;
+
+mod stage;
+mod picture;
+
 use clap::App;
 
 fn main() {
@@ -12,11 +16,11 @@ fn main() {
         let port = matches.value_of("port").unwrap_or_default();
         println!("Pixelflut server port: {}", port);
 
-        if let Some(subcommand_matches) = matches.subcommand_matches("image") {
+        if let Some(subcommand_matches) = matches.subcommand_matches("picture") {
             if let Some(filename) = subcommand_matches.value_of("file") {
-                println!("Image file: {}", filename);
+                println!("picture file: {}", filename);
             } else {
-                println!("No image file specified");
+                println!("No picture file specified");
             }
         }
     } else {
