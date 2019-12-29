@@ -3,6 +3,7 @@ extern crate clap;
 
 mod stage;
 mod picture;
+mod naive;
 
 use clap::App;
 use image::GenericImageView;
