@@ -6,7 +6,7 @@ pub trait Generator {
 
 pub trait Renderer {
     fn render_command(mut self, frame: &DynamicImage);
-    fn get_command(&self) -> Option<String>;
+    fn get_command(&self) -> String;
 }
 
 pub trait Sender {
