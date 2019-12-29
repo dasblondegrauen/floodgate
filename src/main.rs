@@ -7,8 +7,9 @@ mod naive;
 
 use clap::App;
 use image::GenericImageView;
-use crate::stage::Generator;
+use crate::stage::{Generator, Renderer};
 use crate::picture::PictureGenerator;
+use crate::naive::NaiveRenderer;
 
 fn main() {
     let clap_yml = load_yaml!("clap.yml");
@@ -20,7 +21,11 @@ fn main() {
         if let Some(subcommand_matches) = matches.subcommand_matches("picture") {
             if let Some(filename) = subcommand_matches.value_of("file") {
                 let generator = PictureGenerator::load_picture(String::from(filename));
-                let dimensions = generator.get_image().dimensions();
+                let mut renderer = NaiveRenderer::new();
+
+                renderer.render_command(&generator.get_image());
+                let cmd = renderer.get_command();
+                println!("{}", &cmd);
             } else {
                 println!("No picture file specified");
             }

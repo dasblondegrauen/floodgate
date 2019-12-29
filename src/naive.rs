@@ -6,7 +6,7 @@ pub struct NaiveRenderer {
 }
 
 impl Renderer for NaiveRenderer {
-    fn render_command(mut self, frame: &DynamicImage) {
+    fn render_command(&mut self, frame: &DynamicImage) {
         let mut cmd = String::new();
 
         for (x, y, pix) in frame.pixels() {
@@ -22,5 +22,11 @@ impl Renderer for NaiveRenderer {
 
     fn get_command(&self) -> String {
         self.command.clone()
+    }
+}
+
+impl NaiveRenderer {
+    pub fn new() -> NaiveRenderer {
+        NaiveRenderer{command: String::new()}
     }
 }
