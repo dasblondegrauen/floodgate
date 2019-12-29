@@ -25,6 +25,6 @@ impl Renderer for NaiveRenderer {
 
 impl NaiveRenderer {
     pub fn new() -> NaiveRenderer {
-        NaiveRenderer{command: String::new()}
+        NaiveRenderer { command: String::new() }
     }
 }

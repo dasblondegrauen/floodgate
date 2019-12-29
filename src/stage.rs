@@ -10,5 +10,5 @@ pub trait Renderer {
 }
 
 pub trait Sender {
-    fn send_tcp(&self, command: &str);
+    fn send_tcp(&mut self, command: &str);
 }
