@@ -5,6 +5,9 @@ mod stage;
 mod picture;
 
 use clap::App;
+use image::GenericImageView;
+use crate::stage::Generator;
+use crate::picture::PictureGenerator;
 
 fn main() {
     let clap_yml = load_yaml!("clap.yml");
@@ -18,7 +21,10 @@ fn main() {
 
         if let Some(subcommand_matches) = matches.subcommand_matches("picture") {
             if let Some(filename) = subcommand_matches.value_of("file") {
-                println!("picture file: {}", filename);
+                println!("Picture file: {}", filename);
+                let generator = PictureGenerator::load_picture(String::from(filename));
+                let dimensions = generator.get_image().dimensions();
+                println!("{}x{}", dimensions.0, dimensions.1);
             } else {
                 println!("No picture file specified");
             }

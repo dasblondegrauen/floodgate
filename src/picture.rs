@@ -1,5 +1,4 @@
-use image::{GenericImageView, DynamicImage};
-use std::io::{Error, ErrorKind};
+use image::DynamicImage;
 use crate::stage::Generator;
 
 pub struct PictureGenerator {
@@ -14,7 +13,7 @@ impl Generator for PictureGenerator {
 }
 
 impl PictureGenerator {
-    fn load_picture(file: String) -> PictureGenerator {
+    pub fn load_picture(file: String) -> PictureGenerator {
         let img = image::open(&file).expect(&format!("Could not load {}", &file));
         PictureGenerator {
             filename: file,
