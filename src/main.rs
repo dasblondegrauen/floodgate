@@ -21,12 +21,18 @@ fn main() {
 
         if let Some(subcommand_matches) = matches.subcommand_matches("picture") {
             if let Some(filename) = subcommand_matches.value_of("file") {
+                println!("Loading picture");
                 let generator = PictureGenerator::load_picture(String::from(filename));
-                let mut renderer = NaiveRenderer::new();
 
+                println!("Rendering command");
+                let mut renderer = NaiveRenderer::new();
                 renderer.render_command(&generator.get_image());
                 let cmd = renderer.get_command();
+
+                println!("Connecting to server");
                 let mut sender = DefaultSender::connect(host, port);
+
+                println!("Sending picture");
                 sender.send_tcp(&cmd);
             } else {
                 println!("No picture file specified");
