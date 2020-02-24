@@ -13,9 +13,9 @@ args:
         takes_value: true
         default_value: "1234"
 subcommands:
-    - picture:
-        about: Send a static picture
+    - image:
+        about: Send a static image
         args:
             - file:
-                help: Picture file
+                help: Image file
                 required: true
