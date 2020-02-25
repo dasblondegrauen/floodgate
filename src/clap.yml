@@ -12,6 +12,12 @@ args:
         short: p
         takes_value: true
         default_value: "1234"
+    - sender:
+        help: TCP sender backend
+        long: sender
+        short: s
+        takes_value: true
+        default_value: "default"
 subcommands:
     - image:
         about: Send a static image
