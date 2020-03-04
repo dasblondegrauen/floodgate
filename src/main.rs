@@ -1,14 +1,12 @@
 #[macro_use]
 extern crate clap;
 
-mod stage;
 mod image_generator;
 mod naive;
 mod default;
 
 use clap::App;
 use image::DynamicImage;
-use crate::stage::{Generator, Renderer, Sender};
 use crate::image_generator::ImageGenerator;
 use crate::default::DefaultSender;
 
@@ -17,6 +15,7 @@ fn main() {
     let matches = App::from_yaml(clap_yml).get_matches();
     let generator: Option<Box<dyn Fn() -> DynamicImage>>;
     let renderer: Option<Box<dyn Fn(&DynamicImage) -> String>>;
+    let sender: Option<Box<dyn FnMut(&str)>>;
 
     if let Some(host) = matches.value_of("host") {
         let port = matches.value_of("port").unwrap_or_default();
@@ -32,10 +31,11 @@ fn main() {
                 let cmd = renderer.unwrap()(&generator.unwrap()());
 
                 println!("Connecting to server");
-                let mut sender = DefaultSender::connect(host, port);
+                let mut default_sender = DefaultSender::new(host, port);
+                sender = Some(Box::new(move |command: &str| default_sender.send_forever(command)));
 
                 println!("Sending image");
-                sender.send_tcp(&cmd);
+                sender.unwrap()(&cmd);
             } else {
                 println!("No image file specified");
             }
