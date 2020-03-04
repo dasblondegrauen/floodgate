@@ -10,13 +10,13 @@ use clap::App;
 use image::DynamicImage;
 use crate::stage::{Generator, Renderer, Sender};
 use crate::image_generator::ImageGenerator;
-use crate::naive::NaiveRenderer;
 use crate::default::DefaultSender;
 
 fn main() {
     let clap_yml = load_yaml!("clap.yml");
     let matches = App::from_yaml(clap_yml).get_matches();
     let generator: Option<Box<dyn Fn() -> DynamicImage>>;
+    let renderer: Option<Box<dyn Fn(&DynamicImage) -> String>>;
 
     if let Some(host) = matches.value_of("host") {
         let port = matches.value_of("port").unwrap_or_default();
@@ -28,10 +28,8 @@ fn main() {
                 generator = Some(Box::new(move || image_generator.get_image()));
 
                 println!("Rendering command");
-                let mut naive_renderer = NaiveRenderer::new();
-                naive_renderer.render_command(&generator.unwrap()());
-                let renderer = NaiveRenderer::get_command;
-                let cmd = renderer(&naive_renderer);
+                renderer = Some(Box::new(naive::render_command));
+                let cmd = renderer.unwrap()(&generator.unwrap()());
 
                 println!("Connecting to server");
                 let mut sender = DefaultSender::connect(host, port);
